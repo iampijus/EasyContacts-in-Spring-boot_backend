@@ -1,5 +1,6 @@
 package com.pijus.easycontacts.service;
 
+import com.pijus.easycontacts.exception.ResourceNotFoundException;
 import com.pijus.easycontacts.model.Contact;
 import com.pijus.easycontacts.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class ContactServiceImpl implements ContactService{
     @Override
     public Contact updateContact(int id, Contact contact) {
         Contact cont= contactRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("Contact not found with this id: "+id));
+                .orElseThrow(()->new ResourceNotFoundException("Contact not found with this id: "+id));
 
         cont.setName(contact.getName());
         cont.setPhoto(contact.getPhoto());
@@ -49,7 +50,7 @@ public class ContactServiceImpl implements ContactService{
     @Override
     public Map<String, Boolean> deleteContact(int id) {
         Contact contact=contactRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("Contact does not exist with this id: "+id));
+                .orElseThrow(()->new ResourceNotFoundException("Contact does not exist with this id: "+id));
 
         contactRepository.delete(contact);
         Map<String,Boolean> res=new HashMap<>();
